@@ -171,11 +171,33 @@ a {
     linear-gradient(180deg, rgba(255, 249, 242, 0.94) 0%, rgba(255, 240, 222, 0.9) 100%);
   background-size: 120% 120%, 120% 120%, 100% 100%;
   background-position: 0% 0%, 100% 100%, 50% 50%;
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+  --pointer-glow: 0;
+  --pointer-shift-x: 0px;
+  --pointer-shift-y: 0px;
+}
+
+.page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--pointer-glow);
+  background:
+    radial-gradient(circle 180px at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, 0.22), transparent 68%),
+    radial-gradient(circle 300px at var(--pointer-x) var(--pointer-y), rgba(255, 157, 58, 0.14), transparent 72%);
+  transition: opacity 0.28s ease;
 }
 
 .wrap {
   width: min(1180px, 100%);
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  transform: translate3d(var(--pointer-shift-x), var(--pointer-shift-y), 0);
+  transition: transform 0.28s ease;
 }
 
 .hero-page,
@@ -209,6 +231,13 @@ a {
   background:
     linear-gradient(180deg, rgba(255, 121, 0, 0.08), rgba(255, 121, 0, 0) 42%),
     linear-gradient(0deg, rgba(255, 145, 43, 0.1), rgba(255, 145, 43, 0) 36%);
+}
+
+.hero-page::after,
+.end-page::after {
+  background:
+    radial-gradient(circle 220px at var(--pointer-x) var(--pointer-y), rgba(255, 244, 229, 0.18), transparent 66%),
+    radial-gradient(circle 340px at var(--pointer-x) var(--pointer-y), rgba(255, 183, 92, 0.14), transparent 72%);
 }
 
 .hero-layout {
@@ -320,7 +349,7 @@ a {
 
 .cover-company {
   font-family: "STKaiti", "KaiTi", "Kaiti SC", "Songti SC", "Noto Serif SC", serif;
-  font-size: clamp(42px, 4.9vw, 84px);
+  font-size: clamp(50px, 5.7vw, 98px);
   line-height: 1;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -938,11 +967,11 @@ li {
     linear-gradient(180deg, rgba(255, 255, 255, 0) 48%, rgba(255, 122, 0, 0.42) 100%);
 }
 
-.camp-image-1 { background-image: url("Assets/camps-optimized/P1.jpg"); }
-.camp-image-2 { background-image: url("Assets/camps-optimized/P2.jpg"); }
-.camp-image-3 { background-image: url("Assets/camps-optimized/P3.jpg"); }
-.camp-image-4 { background-image: url("Assets/camps-optimized/P4.jpg"); }
-.camp-image-5 { background-image: url("Assets/camps-optimized/P5.jpg"); }
+.camp-image-cangjiang { background-image: url("Assets/camps-optimized/P1.jpg"); }
+.camp-image-xiamen-practice { background-image: url("Assets/camps-optimized/P2.jpg"); }
+.camp-image-zhangzhou { background-image: url("Assets/camps-optimized/P3.jpg"); }
+.camp-image-defense { background-image: url("Assets/camps-optimized/P4.jpg"); }
+.camp-image-putian { background-image: url("Assets/camps-optimized/P5.jpg"); }
 
 .camp-content {
   position: absolute;
@@ -951,18 +980,24 @@ li {
   bottom: 14px;
   z-index: 2;
   color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 .camp-content h3 {
+  min-height: 72px;
   margin-bottom: 10px;
   font-size: clamp(18px, 1.32vw, 26px);
   line-height: 1.28;
+  display: flex;
+  align-items: flex-start;
 }
 
 .camp-content p {
   color: rgba(255, 249, 242, 0.96);
   font-size: clamp(11px, 0.76vw, 14px);
   line-height: 1.58;
+  min-height: 118px;
 }
 
 #page6 {
@@ -1224,6 +1259,19 @@ li {
   text-align: center;
   padding-top: 40px;
   min-height: 268px;
+  --job-rotate-x: 0deg;
+  --job-rotate-y: 0deg;
+  --job-shift-y: 0px;
+  transform: perspective(1200px) rotateX(var(--job-rotate-x)) rotateY(var(--job-rotate-y)) translateY(var(--job-shift-y));
+  transition: transform 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+#page11 .job-card:hover {
+  --job-shift-y: -8px;
+  box-shadow: 0 28px 52px rgba(173, 101, 22, 0.16);
+  background: rgba(255, 252, 247, 0.84);
 }
 
 .job-icon {
@@ -1235,6 +1283,12 @@ li {
   border-radius: 22px;
   background: rgba(255, 145, 43, 0.12);
   font-size: 34px;
+  transition: transform 0.24s ease, background 0.24s ease;
+}
+
+#page11 .job-card:hover .job-icon {
+  transform: translateY(-2px) scale(1.04);
+  background: rgba(255, 145, 43, 0.18);
 }
 
 .job-card p {
@@ -1282,6 +1336,58 @@ li {
   height: 8px;
   border-radius: 50%;
   background: #ff8a18;
+}
+
+#page13 .section-heading {
+  margin-bottom: 24px;
+}
+
+#page12 .section-heading,
+#page13 .section-heading {
+  margin-bottom: 24px;
+}
+
+#page12 .section-heading h2,
+#page13 .section-heading h2 {
+  font-size: clamp(38px, 3.1vw, 54px);
+}
+
+#page12 .section-heading p,
+#page13 .section-heading p {
+  max-width: 880px;
+  font-size: clamp(15px, 1vw, 18px);
+  line-height: 1.72;
+}
+
+#page12 .role-layout,
+#page13 .role-layout {
+  gap: 18px;
+}
+
+#page12 .box,
+#page13 .box {
+  padding: 28px 28px 26px;
+}
+
+#page12 .box h4,
+#page13 .box h4 {
+  margin-bottom: 14px;
+  font-size: 20px;
+}
+
+#page12 .clean-list li,
+#page13 .clean-list li {
+  padding-left: 16px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  line-height: 1.66;
+}
+
+#page12 .clean-list li::before,
+#page13 .clean-list li::before {
+  top: 11px;
+  width: 7px;
+  height: 7px;
 }
 
 .timeline {

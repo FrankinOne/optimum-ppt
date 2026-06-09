@@ -44,6 +44,58 @@ function scrollToAdjacentPage() {
   });
 }
 
+function attachPointerInteraction() {
+  if (prefersReducedMotion) return;
+
+  pages.forEach((page) => {
+    page.addEventListener("pointermove", (event) => {
+      const rect = page.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+      const shiftX = ((x - 50) / 50) * 8;
+      const shiftY = ((y - 50) / 50) * 8;
+
+      page.style.setProperty("--pointer-x", `${x}%`);
+      page.style.setProperty("--pointer-y", `${y}%`);
+      page.style.setProperty("--pointer-glow", "1");
+      page.style.setProperty("--pointer-shift-x", `${shiftX * -1}px`);
+      page.style.setProperty("--pointer-shift-y", `${shiftY * -1}px`);
+    });
+
+    page.addEventListener("pointerleave", () => {
+      page.style.setProperty("--pointer-glow", "0");
+      page.style.setProperty("--pointer-shift-x", "0px");
+      page.style.setProperty("--pointer-shift-y", "0px");
+    });
+  });
+}
+
+function attachJobCardInteraction() {
+  if (prefersReducedMotion) return;
+
+  const jobCards = Array.from(document.querySelectorAll("#page11 .job-card"));
+
+  jobCards.forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const offsetX = (event.clientX - rect.left) / rect.width;
+      const offsetY = (event.clientY - rect.top) / rect.height;
+      const rotateY = (offsetX - 0.5) * 8;
+      const rotateX = (0.5 - offsetY) * 8;
+
+      card.style.setProperty("--job-rotate-x", `${rotateX}deg`);
+      card.style.setProperty("--job-rotate-y", `${rotateY}deg`);
+      card.style.setProperty("--job-shift-y", "-8px");
+    });
+
+    card.addEventListener("pointerleave", () => {
+      card.style.setProperty("--job-rotate-x", "0deg");
+      card.style.setProperty("--job-rotate-y", "0deg");
+      card.style.setProperty("--job-shift-y", "0px");
+    });
+  });
+}
+
 if (!prefersReducedMotion) {
   gsap.from(".side-nav", {
     x: 18,
@@ -101,5 +153,7 @@ navDots.forEach((dot) => {
   });
 });
 
+attachPointerInteraction();
+attachJobCardInteraction();
 updateProgress();
 updateActiveNav();
